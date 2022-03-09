@@ -3,11 +3,11 @@
 /**
   Create a command line NodeJs application to present 
   weather information for a given location
-  
+  version 1.0.1
  */
 
 const inquirer = require("inquirer");
-const request = require("request");
+const axios = require("axios");
 const apiKey = 'd604ab25a953daf809733b2a1a112efc';
 
 /**
@@ -33,70 +33,64 @@ async function getAnswers(message) {
 		.then(async (answers) => {
 			//We will query Open Weather Map once a user returns an input
 			let url = "http://api.openweathermap.org/data/2.5/weather?q=" + answers.city + "&appid=" + apiKey;
+			let repeat = 1;
 
-			let apiResult = await sendRequest(url).catch(e => { console.log(e) });
+			// Make a request for a user with a given ID
+			axios.get(url)
+				.then(function(response) {
+					// handle success
+					//console.log(response);
+					console.log("Today's weather forcast for " + response.data.name + " is '" + response.data.weather[0].description + "' ");
+					let lon = response.data.coord.lon;
+					let lat = response.data.coord.lat;
 
-			//console.log(apiResult);
+					// Now we get weather report for the 7 days
+					url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=" + apiKey;
+					axios.get(url)
+						.then(function(response) {
+							// handle success
+							if (typeof response.data.daily === "object") {
+								console.log("Weather forecast for the next 7 days");
+								response.data.daily.forEach(function(item, index) {
+									var date = msToTime(item.sunrise);
+									console.log("On " + date + " there is " + item.weather[0].description + " with the UV Index of " + item.uvi);
+								});
+							}
+						})
+						.catch(function(error) {
+							// handle error
+							console.log(error);
+						})
+						.then(function() {
 
-			//If weather is definted in result, then we will return true
-			if (typeof apiResult.weather !== "undefined") {
-				console.log("Today's weather forcast for " + apiResult.name + " is '" + apiResult.weather[0].description + "' ");
-				let lon = apiResult.coord.lon;
-				let lat = apiResult.coord.lat;
-
-				/** Now we get weather report for the 7 days
-				 */
-				url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=" + apiKey;
-				apiResult = await sendRequest(url).catch(e => { console.log(e) });
-
-				if (typeof apiResult.daily === "object") {
-					console.log("Weather forecast for the next 7 days");
-					apiResult.daily.forEach(function(item, index) {
-						var date = msToTime(item.sunrise);
-						console.log("On " + date + " there is " + item.weather[0].description + " with the UV Index of " + item.uvi);
-					});
-				}
-				
-				//End the recursive function
-				return true;
-			} else {
-				if (typeof apiResult.message != "undefined") {
-					console.log('Cannot get the weather forecast for ' + answers.city + ' : ' + capitaliseWords(apiResult.message));
-					//console.log();
-				} else {
-					console.log("Cannot find weather forcast for " + answers.city);
-				}
-			}
-
-			getAnswers("Please enter another city");
+						});
 
 
+					//End the recursive function
+					repeat = 0;
+				})
+				.catch(function(error) {
+					// handle error
+					console.log('Cannot get the weather forecast for ' + answers.city + ' : ' + capitaliseWords(error.response.data.message));
+
+				})
+				.then(function() {
+					if (repeat) {
+						getAnswers("Please enter another city");
+					}
+
+				});
 		})
-		.catch();
-}
-
-/**
-   Function to send API request
- */
-async function sendRequest(url) {
-	return new Promise(function(resolve, reject) {
-		request(url, function(error, response, body) {
-			let apiResult = JSON.parse(body);
-			if (!error) {
-				resolve(apiResult);
-			} else {
-				reject(apiResult);
-			}
+		.catch(function(error) {
+			console.log(error)
 		});
-	});
-
 }
 
 //Date format with zero filled
 function msToTime(duration) {
 	let nowDate = new Date(duration * 1000);
-	let date = nowDate.getFullYear()+'/'+(nowDate.getMonth()+1)+'/'+('0' + nowDate.getDate()).slice(-2); 
-	return date ;
+	let date = nowDate.getFullYear() + '/' + (nowDate.getMonth() + 1) + '/' + ('0' + nowDate.getDate()).slice(-2);
+	return date;
 }
 
 //Capitalise the first letter of each word
@@ -111,7 +105,9 @@ function capitaliseWords(words) {
 
 //Call the main function
 getAnswers()
-	.catch(error => { throw error });
+	.catch(function(error) {
+		console.log(error);
+	});
 
 
 
