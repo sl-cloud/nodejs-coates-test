@@ -20,5 +20,7 @@ Moving this into Docker for easy installation
 To Run:
 
 docker pull coderstevelee/nodejs-coates-image
+
 docker run -dit --name nodeTest coderstevelee/nodejs-coates-image
+
 docker exec -it nodeTest bash
