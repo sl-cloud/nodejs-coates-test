@@ -1,0 +1,16 @@
+{
+  "name": "nodejs_coates",
+  "version": "1.0.0",
+  "description": "Coates Integrations Team Engineering Coding Task",
+  "main": "weather.js",
+  "dependencies": {
+    "inquirer": "^8.2.1",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Steve Lee",
+  "license": "ISC"
+}
