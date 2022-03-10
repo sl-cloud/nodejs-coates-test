@@ -3,7 +3,9 @@
 /**
   Create a command line NodeJs application to present 
   weather information for a given location
+  
   version 1.0.1
+  In this version axios is used instead of request
  */
 
 const inquirer = require("inquirer");
@@ -39,7 +41,6 @@ async function getAnswers(message) {
 			axios.get(url)
 				.then(function(response) {
 					// handle success
-					//console.log(response);
 					console.log("Today's weather forcast for " + response.data.name + " is '" + response.data.weather[0].description + "' ");
 					let lon = response.data.coord.lon;
 					let lat = response.data.coord.lat;
@@ -76,6 +77,7 @@ async function getAnswers(message) {
 				})
 				.then(function() {
 					if (repeat) {
+						//We will ask the user for input again
 						getAnswers("Please enter another city");
 					}
 
