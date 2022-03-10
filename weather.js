@@ -73,7 +73,7 @@ async function getAnswers(message) {
 									let date = msToTime(item.sunrise);
 
 									t.push(
-										[date, item.weather[0].description, item.uvi]
+										[date, capitaliseWords(item.weather[0].description), item.uvi]
 									);
 								});
 								console.log(t.toString());
