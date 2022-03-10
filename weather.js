@@ -101,9 +101,6 @@ async function getAnswers(message) {
 						.catch(function(error) {
 							// handle error
 							console.log(error);
-						})
-						.then(function() {
-
 						});
 
 
