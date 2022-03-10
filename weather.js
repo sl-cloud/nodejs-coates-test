@@ -53,7 +53,7 @@ async function getAnswers(message) {
 							if (typeof response.data.daily === "object") {
 								console.log("Weather forecast for the next 7 days");
 								response.data.daily.forEach(function(item, index) {
-									var date = msToTime(item.sunrise);
+									let date = msToTime(item.sunrise);
 									console.log("On " + date + " there is " + item.weather[0].description + " with the UV Index of " + item.uvi);
 								});
 							}
@@ -97,7 +97,7 @@ function msToTime(duration) {
 
 //Capitalise the first letter of each word
 function capitaliseWords(words) {
-	var separateWord = words.toLowerCase().split(' ');
+	let separateWord = words.toLowerCase().split(' ');
 	for (var i = 0; i < separateWord.length; i++) {
 		separateWord[i] = separateWord[i].charAt(0).toUpperCase() +
 			separateWord[i].substring(1);
