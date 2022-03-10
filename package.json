@@ -6,6 +6,7 @@
   "main": "weather.js",
   "dependencies": {
     "axios": "^0.26.1",
+    "chalk": "^2.4.1",
     "inquirer": "^8.2.1"
   },
   "devDependencies": {},
