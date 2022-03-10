@@ -101,6 +101,7 @@ async function getAnswers(message) {
 				})
 				.catch(function(error) {
 					// handle error
+					console.log(error);
 					console.log(chalk.bgRed.white("\nCannot get the weather forecast for " + answers.city + " : " + capitaliseWords(error.response.data.message)));
 
 				})
@@ -119,15 +120,17 @@ async function getAnswers(message) {
 
 //Date format with zero filled
 function msToDate(timestamp) {
-	let formatDate = new Date(timestamp * 1000);
-	let date = formatDate.getFullYear() + '/' + ('0' + (formatDate.getMonth() + 1)).slice(-2) + '/' + ('0' + formatDate.getDate()).slice(-2);
+	let sydneyTime = new Date(timestamp * 1000).toLocaleString("en-US", {timeZone: "Australia/Sydney"});
+	let initDate = new Date(sydneyTime);
+	let date = initDate.getFullYear() + '/' + ('0' + (initDate.getMonth() + 1)).slice(-2) + '/' + ('0' + initDate.getDate()).slice(-2);
 	return date;
 }
 
 //Time format with zero filled
 function msToTime(timestamp) {
-	let formatTime = new Date(timestamp * 1000);
-	let date = ('0' + (formatTime.getHours() + 1)).slice(-2) + ':' + ('0' + (formatTime.getMinutes() + 1)).slice(-2);
+	let sydneyTime = new Date(timestamp * 1000).toLocaleString("en-US", {timeZone: "Australia/Sydney"});
+	let initDate = new Date(sydneyTime);
+	let date = ('0' + (initDate.getHours() + 1)).slice(-2) + ':' + ('0' + (initDate.getMinutes() + 1)).slice(-2);
 	return date;
 }
 
