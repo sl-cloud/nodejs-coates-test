@@ -10,6 +10,9 @@
   version 1.0.2
   Added output formatting
   
+  version 1.0.3
+  Added additional reports
+  
   DOCKER
   docker pull coderstevelee/nodejs-coates-image 
   docker run -dit --name nodeTest coderstevelee/nodejs-coates-image
@@ -51,8 +54,8 @@ async function getAnswers(message) {
 			axios.get(url)
 				.then(function(response) {
 					// handle success
-					console.log(chalk.white("\nToday's weather forcast for " + chalk.blue.bold(response.data.name) + " is '" + response.data.weather[0].description + "' "));
-					console.log(chalk.white("\nThe temperature is " + chalk.blue.bold(response.data.main.temp + String.fromCharCode(176)) + ' but it actually feels like ' + chalk.blue.bold(response.data.main.feels_like + String.fromCharCode(176))));
+					console.log(chalk.white("\nToday at " + chalk.blue.bold(response.data.name) + " the weather has forecasts to have " + chalk.blue.bold(response.data.weather[0].description) + " "));
+					console.log(chalk.white("\nThe current temperature is " + formatTemp(response.data.main.temp) + ' but it actually feels like ' + formatTemp(response.data.main.feels_like) + ' with high/low of ' + formatTemp(response.data.main.temp_min) + '/' + formatTemp(response.data.main.temp_max)));
 					console.log(chalk.white("\nHumidity is " + chalk.blue.bold(response.data.main.humidity + '%') + ' with wind speed of ' + chalk.blue.bold(response.data.wind.speed + ' meter/second')));
 					console.log(chalk.white("\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + ' and sets at ' + chalk.blue.bold(msToTime(response.data.sys.sunset))));
 					let lon = response.data.coord.lon;
@@ -78,7 +81,7 @@ async function getAnswers(message) {
 									let sunset = msToTime(item.sunset);
 
 									t.push(
-										[date, capitaliseWords(item.weather[0].description), item.uvi, item.temp.min + String.fromCharCode(176), item.temp.min + String.fromCharCode(176), sunrise, sunset]
+										[date, capitaliseWords(item.weather[0].description), item.uvi, formatTemp(item.temp.min), formatTemp(item.temp.min), sunrise, sunset]
 									);
 								});
 								console.log(t.toString());
@@ -126,6 +129,11 @@ function msToTime(timestamp) {
 	let formatTime = new Date(timestamp * 1000);
 	let date = ('0' + (formatTime.getHours() + 1)).slice(-2) + ':' + ('0' + (formatTime.getMinutes() + 1)).slice(-2);
 	return date;
+}
+
+//Format Temp
+function formatTemp(temp) {
+	return chalk.blue.bold(temp + String.fromCharCode(176));
 }
 
 
