@@ -59,7 +59,8 @@ async function getAnswers(message) {
 							// handle success
 							if (typeof response.data.daily === "object") {
 								console.log("\nWeather forecast for the next 7 days");
-								// instantiate
+								
+								// instantiate table
 								let t = new table({
 									head: ['Date', 'Forecast', 'UV Index']
 									, colWidths: [20, 20, 10]
@@ -67,7 +68,7 @@ async function getAnswers(message) {
 
 								response.data.daily.forEach(function(item, index) {
 									let date = msToTime(item.sunrise);
-									//console.log("On " + date + " there is " + item.weather[0].description + " with a UV Index of " + item.uvi);
+
 									t.push(
 										[date, item.weather[0].description, item.uvi]
 									);
