@@ -59,7 +59,7 @@ async function getAnswers(message) {
 								console.log("Weather forecast for the next 7 days");
 								response.data.daily.forEach(function(item, index) {
 									let date = msToTime(item.sunrise);
-									console.log("On " + date + " there is " + item.weather[0].description + " with the UV Index of " + item.uvi);
+									console.log("On " + date + " there is " + item.weather[0].description + " with a UV Index of " + item.uvi);
 								});
 							}
 						})
