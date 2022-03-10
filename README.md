@@ -6,7 +6,10 @@ This cli application developed using:
 node v12.20.0
 npm 6.14.8
 
-In Version 1.0.1, axios is used instead of request
+Version 1.0.1, axios is used instead of request
+
+Version 1.0.2, added output formatting
+
 
 Unfortunately during development I tried to downgrade my home development environment from node v12.20.0
 to node 8 which caused some issues and wasted some of my time so I decided to do this script using node v12.

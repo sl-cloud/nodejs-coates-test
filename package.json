@@ -1,6 +1,6 @@
 {
   "name": "nodejs_coates",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Coates Integrations Team Engineering Coding Task",
   "git-repo": "https://github.com/CooderSteve/nodejs-coates-test",
   "main": "weather.js",

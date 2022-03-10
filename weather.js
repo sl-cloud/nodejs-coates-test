@@ -15,6 +15,8 @@
 
 const inquirer = require("inquirer");
 const axios = require("axios");
+const chalk = require("chalk");
+const table = require('cli-table');
 const apiKey = 'd604ab25a953daf809733b2a1a112efc';
 
 /**
@@ -46,7 +48,7 @@ async function getAnswers(message) {
 			axios.get(url)
 				.then(function(response) {
 					// handle success
-					console.log("Today's weather forcast for " + response.data.name + " is '" + response.data.weather[0].description + "' ");
+					console.log(chalk.white("\nToday's weather forcast for " + chalk.blue.bold(response.data.name) + " is '" + response.data.weather[0].description + "' "));
 					let lon = response.data.coord.lon;
 					let lat = response.data.coord.lat;
 
@@ -56,11 +58,21 @@ async function getAnswers(message) {
 						.then(function(response) {
 							// handle success
 							if (typeof response.data.daily === "object") {
-								console.log("Weather forecast for the next 7 days");
+								console.log("\nWeather forecast for the next 7 days");
+								// instantiate
+								let t = new table({
+									head: ['Date', 'Forecast', 'UV Index']
+									, colWidths: [20, 20, 10]
+								});
+
 								response.data.daily.forEach(function(item, index) {
 									let date = msToTime(item.sunrise);
-									console.log("On " + date + " there is " + item.weather[0].description + " with a UV Index of " + item.uvi);
+									//console.log("On " + date + " there is " + item.weather[0].description + " with a UV Index of " + item.uvi);
+									t.push(
+										[date, item.weather[0].description, item.uvi]
+									);
 								});
+								console.log(t.toString());
 							}
 						})
 						.catch(function(error) {
@@ -77,7 +89,7 @@ async function getAnswers(message) {
 				})
 				.catch(function(error) {
 					// handle error
-					console.log('Cannot get the weather forecast for ' + answers.city + ' : ' + capitaliseWords(error.response.data.message));
+					console.log(chalk.bgRed.white("\nCannot get the weather forecast for " + answers.city + " : " + capitaliseWords(error.response.data.message)));
 
 				})
 				.then(function() {
