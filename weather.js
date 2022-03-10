@@ -54,7 +54,7 @@ async function getAnswers(message) {
 			axios.get(url)
 				.then(function(response) {
 					// handle success
-					console.log(chalk.white("\nToday at " + chalk.blue.bold(response.data.name) + " the weather has forecasts to have " + chalk.blue.bold(response.data.weather[0].description) + " "));
+					console.log(chalk.white("\nToday at " + chalk.blue.bold(response.data.name) + " the weather forecasts to have " + chalk.blue.bold(response.data.weather[0].description) + " "));
 					console.log(chalk.white("\nThe current temperature is " + formatTemp(response.data.main.temp) + ' but it actually feels like ' + formatTemp(response.data.main.feels_like) + ' with the day\'s low/high of ' + formatTemp(response.data.main.temp_min) + '/' + formatTemp(response.data.main.temp_max)));
 					console.log(chalk.white("\nHumidity is " + chalk.blue.bold(response.data.main.humidity + '%') + ' with wind speed of ' + chalk.blue.bold(response.data.wind.speed + ' meter/second')));
 					console.log(chalk.white("\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + ' and sets at ' + chalk.blue.bold(msToTime(response.data.sys.sunset))));
