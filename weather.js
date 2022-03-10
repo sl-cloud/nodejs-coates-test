@@ -77,11 +77,14 @@ async function getAnswers(message) {
 
 								response.data.daily.forEach(function(item, index) {
 									let date = msToDate(item.sunrise);
+									let forecast = capitaliseWords(item.weather[0].description);
+									let temp_min = formatTemp(item.temp.min);
+									let temp_max = formatTemp(item.temp.max);
 									let sunrise = msToTime(item.sunrise);
 									let sunset = msToTime(item.sunset);
 
 									t.push(
-										[date, capitaliseWords(item.weather[0].description), item.uvi, formatTemp(item.temp.min), formatTemp(item.temp.min), sunrise, sunset]
+										[date, forecast, item.uvi, temp_min, temp_max, sunrise, sunset]
 									);
 								});
 								console.log(t.toString());
