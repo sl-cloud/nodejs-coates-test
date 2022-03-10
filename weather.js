@@ -13,7 +13,7 @@
   DOCKER
   docker pull coderstevelee/nodejs-coates-image 
   docker run -dit --name nodeTest coderstevelee/nodejs-coates-image
-  docker exec -it nodeTest sh
+  docker exec -it nodeTest sh OR docker exec -it nodeTest /home/node/app/weather.js
  */
 
 const inquirer = require("inquirer");
