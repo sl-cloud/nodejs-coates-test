@@ -7,6 +7,9 @@
   version 1.0.1
   In this version axios is used instead of request
   
+  version 1.0.2
+  Added output formatting
+  
   DOCKER
   docker pull coderstevelee/nodejs-coates-image 
   docker run -dit --name nodeTest coderstevelee/nodejs-coates-image
