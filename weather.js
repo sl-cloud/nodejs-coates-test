@@ -54,13 +54,20 @@ async function getAnswers(message) {
 			axios.get(url)
 				.then(function(response) {
 					// handle success
-					console.log(chalk.white("\nToday at " + chalk.blue.bold(response.data.name) + " the weather forecasts to have " + chalk.blue.bold(response.data.weather[0].description) + " "));
-					console.log(chalk.white("\nThe current temperature is " + formatTemp(response.data.main.temp) + ' but it actually feels like ' + formatTemp(response.data.main.feels_like) + ' with the day\'s low/high of ' + formatTemp(response.data.main.temp_min) + '/' + formatTemp(response.data.main.temp_max)));
-					console.log(chalk.white("\nHumidity is " + chalk.blue.bold(response.data.main.humidity + '%') + ' with wind speed of ' + chalk.blue.bold(response.data.wind.speed + ' meter/second')));
-					console.log(chalk.white("\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + ' and sets at ' + chalk.blue.bold(msToTime(response.data.sys.sunset))));
+					let report_weather = "\nToday at " + chalk.blue.bold(response.data.name) + " the weather forecasts to have " + chalk.blue.bold(response.data.weather[0].description);
+					let report_temp = "\nThe current temperature is " + formatTemp(response.data.main.temp) + ' but it actually feels like ' + formatTemp(response.data.main.feels_like) + ' with the day\'s low/high of ' + formatTemp(response.data.main.temp_min) + '/' + formatTemp(response.data.main.temp_max);
+					let report_wind = "\nHumidity is " + chalk.blue.bold(response.data.main.humidity + '%') + ' with wind speed of ' + chalk.blue.bold(response.data.wind.speed + ' meter/second');
+					let report_sunrise = "\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + ' and sets at ' + chalk.blue.bold(msToTime(response.data.sys.sunset));
+					
+					//Variables for 7 days report api call
 					let lon = response.data.coord.lon;
 					let lat = response.data.coord.lat;
-
+					
+					console.log(report_weather);
+					console.log(report_temp);
+					console.log(report_wind);
+					console.log(report_sunrise);
+					
 					// Now we get weather report for the 7 days
 					url = "https://api.openweathermap.org/data/2.5/onecall?units=metric&lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=" + apiKey;
 					axios.get(url)
