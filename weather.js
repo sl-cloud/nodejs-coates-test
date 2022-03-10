@@ -104,7 +104,6 @@ async function getAnswers(message) {
 				})
 				.catch(function(error) {
 					// handle error
-					console.log(error);
 					console.log(chalk.bgRed.white("\nCannot get the weather forecast for " + answers.city + " : " + capitaliseWords(error.response.data.message)));
 
 				})
