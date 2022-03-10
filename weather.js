@@ -37,7 +37,7 @@ async function getAnswers(message) {
 			let url = "http://api.openweathermap.org/data/2.5/weather?q=" + answers.city + "&appid=" + apiKey;
 			let repeat = 1;
 
-			// Make a request for a user with a given ID
+			//Fetch the weather report
 			axios.get(url)
 				.then(function(response) {
 					// handle success
