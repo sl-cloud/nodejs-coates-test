@@ -67,7 +67,7 @@ async function getAnswers(message) {
 						.then(function(response) {
 							// handle success
 							if (typeof response.data.daily === "object") {
-								console.log(chalk.yellow.bold("\nWeather forecast for the next 7 days"));
+								console.log(chalk.yellow.bold("\n7 days weather forecast"));
 								
 								// instantiate table
 								let t = new table({
