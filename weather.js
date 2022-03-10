@@ -23,7 +23,7 @@ const table = require('cli-table');
 const apiKey = 'd604ab25a953daf809733b2a1a112efc';
 
 /**
-	getAnswer function to interact with user in CLI
+	getAnswers function to interact with user in CLI
 	This is a recursive function and will loop until a city with the correct reply is provided
 	
 	@param STRING message - the message to display on the interactive CLI
@@ -44,7 +44,7 @@ async function getAnswers(message) {
 		])
 		.then(async (answers) => {
 			//We will query Open Weather Map once a user returns an input
-			let url = "http://api.openweathermap.org/data/2.5/weather?q=" + answers.city + "&appid=" + apiKey;
+			let url = "http://api.openweathermap.org/data/2.5/weather?units=metric&q=" + answers.city + "&appid=" + apiKey;
 			let repeat = 1;
 
 			//Fetch the weather report
@@ -52,28 +52,33 @@ async function getAnswers(message) {
 				.then(function(response) {
 					// handle success
 					console.log(chalk.white("\nToday's weather forcast for " + chalk.blue.bold(response.data.name) + " is '" + response.data.weather[0].description + "' "));
+					console.log(chalk.white("\nThe temperature is " + chalk.blue.bold(response.data.main.temp + String.fromCharCode(176)) + ' but it actually feels like ' + chalk.blue.bold(response.data.main.feels_like + String.fromCharCode(176))));
+					console.log(chalk.white("\nHumidity is " + chalk.blue.bold(response.data.main.humidity + '%') + ' with wind speed of ' + chalk.blue.bold(response.data.wind.speed + ' meter/second')));
+					console.log(chalk.white("\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + ' and sets at ' + chalk.blue.bold(msToTime(response.data.sys.sunset))));
 					let lon = response.data.coord.lon;
 					let lat = response.data.coord.lat;
 
 					// Now we get weather report for the 7 days
-					url = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=" + apiKey;
+					url = "https://api.openweathermap.org/data/2.5/onecall?units=metric&lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=" + apiKey;
 					axios.get(url)
 						.then(function(response) {
 							// handle success
 							if (typeof response.data.daily === "object") {
-								console.log("\nWeather forecast for the next 7 days");
+								console.log(chalk.yellow.bold("\nWeather forecast for the next 7 days"));
 								
 								// instantiate table
 								let t = new table({
-									head: ['Date', 'Forecast', 'UV Index']
-									, colWidths: [20, 20, 10]
+									head: ['Date', 'Forecast', 'UV Index', 'Temp Low', 'Temp High', 'Sunrise', 'Sunset']
+									, colWidths: [20, 20, 10, 12, 12, 12, 12]
 								});
 
 								response.data.daily.forEach(function(item, index) {
-									let date = msToTime(item.sunrise);
+									let date = msToDate(item.sunrise);
+									let sunrise = msToTime(item.sunrise);
+									let sunset = msToTime(item.sunset);
 
 									t.push(
-										[date, capitaliseWords(item.weather[0].description), item.uvi]
+										[date, capitaliseWords(item.weather[0].description), item.uvi, item.temp.min + String.fromCharCode(176), item.temp.min + String.fromCharCode(176), sunrise, sunset]
 									);
 								});
 								console.log(t.toString());
@@ -110,11 +115,19 @@ async function getAnswers(message) {
 }
 
 //Date format with zero filled
-function msToTime(timestamp) {
+function msToDate(timestamp) {
 	let formatDate = new Date(timestamp * 1000);
 	let date = formatDate.getFullYear() + '/' + ('0' + (formatDate.getMonth() + 1)).slice(-2) + '/' + ('0' + formatDate.getDate()).slice(-2);
 	return date;
 }
+
+//Time format with zero filled
+function msToTime(timestamp) {
+	let formatTime = new Date(timestamp * 1000);
+	let date = ('0' + (formatTime.getHours() + 1)).slice(-2) + ':' + ('0' + (formatTime.getMinutes() + 1)).slice(-2);
+	return date;
+}
+
 
 //Capitalise the first letter of each word
 function capitaliseWords(words) {
