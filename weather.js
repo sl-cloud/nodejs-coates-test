@@ -22,8 +22,9 @@
 const inquirer = require("inquirer");
 const axios = require("axios");
 const chalk = require("chalk");
-const table = require('cli-table');
-const apiKey = 'd604ab25a953daf809733b2a1a112efc';
+const table = require("cli-table");
+const apiKey = "d604ab25a953daf809733b2a1a112efc";
+const timezone = "Australia/Sydney";
 
 /**
 	getAnswers function to interact with user in CLI
@@ -40,8 +41,8 @@ async function getAnswers(message) {
 	await inquirer
 		.prompt([
 			{
-				type: 'input',
-				name: 'city',
+				type: "input",
+				name: "city",
 				message: message
 			},
 		])
@@ -55,9 +56,9 @@ async function getAnswers(message) {
 				.then(function(response) {
 					// handle success
 					let report_weather = "\nToday at " + chalk.blue.bold(response.data.name) + " the weather forecasts to have " + chalk.blue.bold(response.data.weather[0].description);
-					let report_temp = "\nThe current temperature is " + formatTemp(response.data.main.temp) + ' but it actually feels like ' + formatTemp(response.data.main.feels_like) + ' with the day\'s low/high of ' + formatTemp(response.data.main.temp_min) + '/' + formatTemp(response.data.main.temp_max);
-					let report_wind = "\nHumidity is " + chalk.blue.bold(response.data.main.humidity + '%') + ' with wind speed of ' + chalk.blue.bold(response.data.wind.speed + ' meter/second');
-					let report_sunrise = "\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + ' and sets at ' + chalk.blue.bold(msToTime(response.data.sys.sunset));
+					let report_temp = "\nThe current temperature is " + formatTemp(response.data.main.temp) + " but it actually feels like " + formatTemp(response.data.main.feels_like) + " with the day's low/high of " + formatTemp(response.data.main.temp_min) + "/" + formatTemp(response.data.main.temp_max);
+					let report_wind = "\nHumidity is " + chalk.blue.bold(response.data.main.humidity + "%") + " with wind speed of " + chalk.blue.bold(response.data.wind.speed + " meter/sec");
+					let report_sunrise = "\nThe sun rises at " + chalk.blue.bold(msToTime(response.data.sys.sunrise)) + " and sets at " + chalk.blue.bold(msToTime(response.data.sys.sunset));
 					
 					//Variables for 7 days report api call
 					let lon = response.data.coord.lon;
@@ -78,7 +79,7 @@ async function getAnswers(message) {
 								
 								// instantiate table
 								let t = new table({
-									head: ['Date', 'Forecast', 'UV Index', 'Temp Low', 'Temp High', 'Sunrise', 'Sunset']
+									head: ["Date", "Forecast", "UV Index", "Temp Low", "Temp High", "Sunrise", "Sunset"]
 									, colWidths: [20, 20, 10, 12, 12, 12, 12]
 								});
 
@@ -129,17 +130,17 @@ async function getAnswers(message) {
 
 //Date format with zero filled
 function msToDate(timestamp) {
-	let sydneyTime = new Date(timestamp * 1000).toLocaleString("en-US", {timeZone: "Australia/Sydney"});
+	let sydneyTime = new Date(timestamp * 1000).toLocaleString("en-US", {timeZone: timezone});
 	let initDate = new Date(sydneyTime);
-	let date = initDate.getFullYear() + '/' + ('0' + (initDate.getMonth() + 1)).slice(-2) + '/' + ('0' + initDate.getDate()).slice(-2);
+	let date = initDate.getFullYear() + "/" + ("0" + (initDate.getMonth() + 1)).slice(-2) + "/" + ("0" + initDate.getDate()).slice(-2);
 	return date;
 }
 
 //Time format with zero filled
 function msToTime(timestamp) {
-	let sydneyTime = new Date(timestamp * 1000).toLocaleString("en-US", {timeZone: "Australia/Sydney"});
+	let sydneyTime = new Date(timestamp * 1000).toLocaleString("en-US", {timeZone: timezone});
 	let initDate = new Date(sydneyTime);
-	let date = ('0' + (initDate.getHours() + 1)).slice(-2) + ':' + ('0' + (initDate.getMinutes() + 1)).slice(-2);
+	let date = ("0" + (initDate.getHours() + 1)).slice(-2) + ":" + ("0" + (initDate.getMinutes() + 1)).slice(-2);
 	return date;
 }
 
@@ -151,12 +152,12 @@ function formatTemp(temp) {
 
 //Capitalise the first letter of each word
 function capitaliseWords(words) {
-	let separateWord = words.toLowerCase().split(' ');
+	let separateWord = words.toLowerCase().split(" ");
 	for (var i = 0; i < separateWord.length; i++) {
 		separateWord[i] = separateWord[i].charAt(0).toUpperCase() +
 			separateWord[i].substring(1);
 	}
-	return separateWord.join(' ');
+	return separateWord.join(" ");
 }
 
 //Call the main function
