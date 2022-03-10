@@ -95,8 +95,8 @@ async function getAnswers(message) {
 
 //Date format with zero filled
 function msToTime(duration) {
-	let nowDate = new Date(duration * 1000);
-	let date = nowDate.getFullYear() + '/' + ('0' + (nowDate.getMonth() + 1)).slice(-2) + '/' + ('0' + nowDate.getDate()).slice(-2);
+	let formatDate = new Date(duration * 1000);
+	let date = formatDate.getFullYear() + '/' + ('0' + (formatDate.getMonth() + 1)).slice(-2) + '/' + ('0' + formatDate.getDate()).slice(-2);
 	return date;
 }
 
