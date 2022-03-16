@@ -38,7 +38,7 @@ async function getAnswers(message) {
 		message = "Please enter a city";
 	}
 
-	await inquirer
+	let q = await inquirer
 		.prompt([
 			{
 				type: "input",
@@ -46,7 +46,7 @@ async function getAnswers(message) {
 				message: message
 			},
 		])
-		.then(async (answers) => {
+		.then((answers) => {
 			//We will query Open Weather Map once a user returns an input
 			let url = "http://api.openweathermap.org/data/2.5/weather?units=metric&q=" + answers.city + "&appid=" + apiKey;
 			let repeat = 1;
