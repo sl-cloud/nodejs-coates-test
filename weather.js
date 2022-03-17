@@ -23,7 +23,7 @@ const inquirer = require("inquirer");
 const axios = require("axios");
 const chalk = require("chalk");
 const table = require("cli-table");
-const apiKey = "d604ab25a953daf809733b2a1a112efc";
+const apiKey = "<API KEY>";
 const timezone = "Australia/Sydney";
 
 /**
